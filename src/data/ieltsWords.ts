@@ -1,0 +1,34 @@
+import type { WordEntry } from "../domain/types";
+
+export const ieltsWords: WordEntry[] = [
+  {
+    id: "abandon",
+    word: "abandon",
+    phonetic: "/əˈbændən/",
+    meaningZh: "放弃",
+    example: "They had to abandon the plan after the storm.",
+    audioSrc: "/audio/words/en-us-abandon.ogg",
+    difficulty: "medium",
+    order: 1,
+  },
+  {
+    id: "abate",
+    word: "abate",
+    phonetic: "/əˈbeɪt/",
+    meaningZh: "减弱，缓和",
+    example: "The noise began to abate after midnight.",
+    audioSrc: "/audio/words/en-us-abate.ogg",
+    difficulty: "medium",
+    order: 2,
+  },
+  {
+    id: "abrupt",
+    word: "abrupt",
+    phonetic: "/əˈbrʌpt/",
+    meaningZh: "突然的，唐突的",
+    example: "The meeting came to an abrupt end.",
+    audioSrc: "/audio/words/en-us-abrupt.ogg",
+    difficulty: "medium",
+    order: 3,
+  },
+];
