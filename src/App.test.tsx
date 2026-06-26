@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { StrictMode } from "react";
 import App from "./App";
 
 beforeEach(() => {
@@ -8,7 +9,11 @@ beforeEach(() => {
 
 it("starts a daily session from the dashboard", async () => {
   const user = userEvent.setup();
-  render(<App />);
+  render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
 
   expect(screen.getByText("30 total questions")).toBeInTheDocument();
   await user.click(screen.getByRole("button", { name: "Start practice" }));
@@ -71,5 +76,10 @@ it("advances once to the next word after the result countdown", async () => {
   expect(screen.getByText("Clean success")).toBeInTheDocument();
 
   expect(await screen.findByText("/əˈbeɪt/", {}, { timeout: 2500 })).toBeInTheDocument();
+  await new Promise((resolve) => {
+    window.setTimeout(resolve, 1500);
+  });
+  expect(screen.getByText("/əˈbeɪt/")).toBeInTheDocument();
   expect(screen.queryByText("Session complete")).not.toBeInTheDocument();
+  expect(screen.queryByText("/əˈbrʌpt/")).not.toBeInTheDocument();
 });

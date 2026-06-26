@@ -109,6 +109,7 @@ export default function App() {
     return (
       <main className="app-shell">
         <PracticeScreen
+          key={activeWord.id}
           word={activeWord}
           countdownSeconds={settings.countdownSeconds}
           autoplayPronunciation={settings.autoplayPronunciation}
