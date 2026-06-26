@@ -9,7 +9,7 @@ type PracticeScreenProps = {
   countdownSeconds: number;
   autoplayPronunciation: boolean;
   onComplete: (result: WordAttemptResult) => void;
-  playPronunciation: (src: string) => Promise<unknown>;
+  playPronunciation: (src: string, fallbackWord: string) => Promise<unknown>;
   playSuccess: () => void;
   playError: () => void;
 };
@@ -37,8 +37,17 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
 
   useEffect(() => {
     if (!autoplayPronunciation) return;
-    playPronunciation(word.audioSrc).catch(() => setAudioError(true));
-  }, [autoplayPronunciation, playPronunciation, word.audioSrc]);
+    playPronunciation(word.audioSrc, word.word).catch(() => undefined);
+  }, [autoplayPronunciation, playPronunciation, word.audioSrc, word.word]);
+
+  async function handleReplay() {
+    try {
+      await playPronunciation(word.audioSrc, word.word);
+      setAudioError(false);
+    } catch {
+      setAudioError(true);
+    }
+  }
 
   useEffect(() => {
     if (!showResult) return;
@@ -93,7 +102,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
       <h1>{word.phonetic}</h1>
       {audioError ? <p role="status">Audio temporarily unavailable</p> : null}
       <div className="practice-actions">
-        <button type="button" onClick={() => playPronunciation(word.audioSrc).catch(() => setAudioError(true))}>Replay pronunciation</button>
+        <button type="button" onClick={handleReplay}>Replay pronunciation</button>
         <button type="button" onClick={() => setHintUsed(true)}>Show hint</button>
       </div>
       {hintUsed ? <p className="hint-word">{word.word}</p> : null}

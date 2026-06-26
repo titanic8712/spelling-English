@@ -1,9 +1,9 @@
-# Audio Attribution
+# Audio Notes
 
-Word pronunciation samples are intended to be bundled for offline first-version testing.
+Word pronunciation samples are bundled for offline first-version testing.
 
-- `en-us-abandon.ogg`: Wikimedia Commons `File:En-us-abandon.ogg`, U.S. English pronunciation, https://commons.wikimedia.org/wiki/File:En-us-abandon.ogg
-- `en-us-abate.ogg`: Wikimedia Commons `File:En-us-abate.ogg`, U.S. English pronunciation, https://commons.wikimedia.org/wiki/File:En-us-abate.ogg
-- `en-us-abrupt.ogg`: Wikimedia Commons `File:En-us-abrupt.ogg`, U.S. English pronunciation, https://commons.wikimedia.org/wiki/File:En-us-abrupt.ogg
+- `en-us-abandon.wav`: generated locally with the macOS `Samantha` en_US voice.
+- `en-us-abate.wav`: generated locally with the macOS `Samantha` en_US voice.
+- `en-us-abrupt.wav`: generated locally with the macOS `Samantha` en_US voice.
 
-Note: the implementation plan expects these files under `public/audio/words/`. If a local network cannot download from Wikimedia, the app still handles missing audio by showing a non-blocking message and allowing spelling practice to continue.
+The browser app also includes an en-US `SpeechSynthesis` fallback for environments where a bundled file cannot be played.

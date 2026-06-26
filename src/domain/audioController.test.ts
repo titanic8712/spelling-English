@@ -20,6 +20,21 @@ it("reports pronunciation playback failure without throwing away the app flow", 
   await expect(controller.playPronunciation("/missing.ogg")).rejects.toThrow("missing");
 });
 
+it("falls back to spoken en-US pronunciation when the local audio file is missing", async () => {
+  const spoken: string[] = [];
+  const controller = createAudioController({
+    createAudio: () => ({ play: () => Promise.reject(new Error("missing")) }),
+    playTone: () => undefined,
+    speakWord: (word) => {
+      spoken.push(word);
+      return Promise.resolve();
+    },
+  });
+
+  await expect(controller.playPronunciation("/missing.ogg", "abandon")).resolves.toBeUndefined();
+  expect(spoken).toEqual(["abandon"]);
+});
+
 it("plays success and error tones", () => {
   const tones: string[] = [];
   const controller = createAudioController({

@@ -5,7 +5,7 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { SummaryScreen } from "./components/SummaryScreen";
 import { TodayScreen } from "./components/TodayScreen";
 import { ieltsWords } from "./data/ieltsWords";
-import { createAudioController, createBrowserTonePlayer } from "./domain/audioController";
+import { createAudioController, createBrowserSpeechPlayer, createBrowserTonePlayer } from "./domain/audioController";
 import { buildDailySession } from "./domain/practiceEngine";
 import { applyReviewResult } from "./domain/reviewScheduler";
 import { DEFAULT_SETTINGS, createStorage } from "./domain/storage";
@@ -15,6 +15,7 @@ const storage = createStorage(window.localStorage);
 const audio = createAudioController({
   createAudio: (src) => new Audio(src),
   playTone: createBrowserTonePlayer(),
+  speakWord: createBrowserSpeechPlayer(),
 });
 
 function todayIsoDate() {
@@ -114,7 +115,7 @@ export default function App() {
           countdownSeconds={settings.countdownSeconds}
           autoplayPronunciation={settings.autoplayPronunciation}
           onComplete={handleWordComplete}
-          playPronunciation={(src) => audio.playPronunciation(src)}
+          playPronunciation={(src, fallbackWord) => audio.playPronunciation(src, fallbackWord)}
           playSuccess={() => {
             if (settings.soundEffectsEnabled) audio.playSuccess();
           }}
