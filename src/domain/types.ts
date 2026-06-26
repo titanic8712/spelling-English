@@ -9,6 +9,10 @@ export type WordEntry = {
   audioSrc: string;
   difficulty: WordDifficulty;
   order: number;
+  category?: string;
+  partOfSpeech?: string;
+  note?: string;
+  source?: string;
 };
 
 export type WordProgress = {

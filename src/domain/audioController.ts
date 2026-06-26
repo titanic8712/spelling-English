@@ -50,6 +50,10 @@ export function createBrowserSpeechPlayer() {
 export function createAudioController(deps: AudioControllerDeps) {
   return {
     async playPronunciation(src: string, fallbackWord?: string): Promise<unknown> {
+      if (src.length === 0 && fallbackWord != null && deps.speakWord != null) {
+        return deps.speakWord(fallbackWord);
+      }
+
       try {
         return await deps.createAudio(src).play();
       } catch (error) {

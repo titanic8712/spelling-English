@@ -35,6 +35,26 @@ it("falls back to spoken en-US pronunciation when the local audio file is missin
   expect(spoken).toEqual(["abandon"]);
 });
 
+it("uses spoken en-US pronunciation directly when no local audio source is provided", async () => {
+  const createdAudio: string[] = [];
+  const spoken: string[] = [];
+  const controller = createAudioController({
+    createAudio: (src) => {
+      createdAudio.push(src);
+      return { play: () => Promise.resolve() };
+    },
+    playTone: () => undefined,
+    speakWord: (word) => {
+      spoken.push(word);
+      return Promise.resolve();
+    },
+  });
+
+  await expect(controller.playPronunciation("", "atmosphere")).resolves.toBeUndefined();
+  expect(createdAudio).toEqual([]);
+  expect(spoken).toEqual(["atmosphere"]);
+});
+
 it("plays success and error tones", () => {
   const tones: string[] = [];
   const controller = createAudioController({

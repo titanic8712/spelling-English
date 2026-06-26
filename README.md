@@ -5,7 +5,7 @@ Offline-first IELTS vocabulary spelling trainer for B1-B2 learners.
 ## Features
 
 - Daily practice target setting
-- IELTS-style sample word bank
+- 1,600+ MIT-licensed IELTS vocabulary entries with Chinese meanings
 - American phonetics and bundled local pronunciation audio
 - Keyboard-based letter-by-letter spelling cells
 - Wrong-answer retry with shake feedback and error tone
@@ -50,6 +50,12 @@ The first sample words include bundled `.wav` pronunciation files generated with
 - `public/audio/words/en-us-abrupt.wav`
 
 If a browser cannot play a bundled file, the app attempts an en-US `SpeechSynthesis` fallback.
+
+Most imported IELTS vocabulary entries do not bundle local `.wav` files. They use the same en-US browser speech fallback by default.
+
+## Vocabulary Source
+
+The imported IELTS vocabulary corpus is derived from [`hefengxian/ielts-vocabulary`](https://github.com/hefengxian/ielts-vocabulary), licensed under MIT. See `docs/THIRD_PARTY_NOTICES.md`.
 
 ## Project Scope
 

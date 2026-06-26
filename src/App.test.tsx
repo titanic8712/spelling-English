@@ -15,9 +15,11 @@ it("starts a daily session from the dashboard", async () => {
     </StrictMode>,
   );
 
+  expect(screen.getByText("Today's study plan")).toBeInTheDocument();
   expect(screen.getByText("30 total questions")).toBeInTheDocument();
   await user.click(screen.getByRole("button", { name: "Start practice" }));
 
+  expect(screen.getByText("Type what you hear")).toBeInTheDocument();
   expect(screen.getByText("/əˈbændən/")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Replay pronunciation" })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Show hint" })).toBeInTheDocument();
