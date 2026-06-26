@@ -10,7 +10,19 @@ body {
 }
 
 button {
+  min-height: 40px;
+  border: 1px solid #2f5d8c;
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #ffffff;
+  background: #2f5d8c;
   font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #f2c94c;
+  outline-offset: 2px;
 }
 
 .app-shell {
@@ -18,13 +30,122 @@ button {
   padding: 32px;
 }
 
-.today-panel {
-  max-width: 960px;
+.today-panel,
+.practice-panel,
+.summary-panel,
+.result-panel {
+  width: min(960px, 100%);
   margin: 0 auto;
 }
 
-.eyebrow {
+.eyebrow,
+.result-state {
   margin: 0 0 8px;
   color: #526070;
   font-size: 14px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.stats-grid span,
+.result-panel,
+.summary-panel {
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.settings-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.settings-panel label {
+  display: grid;
+  gap: 6px;
+  color: #526070;
+  font-size: 14px;
+}
+
+.settings-panel input[type="number"] {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #b9c3d0;
+  border-radius: 8px;
+  padding: 0 10px;
+  font: inherit;
+}
+
+.practice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.hint-word {
+  color: #7a3f00;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.spelling-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.spelling-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(38px, 8vw, 56px);
+  aspect-ratio: 1;
+  border: 2px solid #8291a5;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.shake {
+  animation: shake 280ms ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 18px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-panel h1 {
+    font-size: 28px;
+  }
 }
