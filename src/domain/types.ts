@@ -37,12 +37,17 @@ export type WordAttemptResult = {
   cleanSuccess: boolean;
   wrongAttempts: number;
   hintUsed: boolean;
+  durationMs: number;
+  typedCharacterCount: number;
+  accuracyPercent: number;
   completedAt: string;
 };
 
 export type SessionSummary = {
   completedCount: number;
   cleanSuccessCount: number;
+  averageAccuracyPercent: number;
+  averageDurationMs: number;
   retryWordIds: string[];
   hintedWordIds: string[];
   tomorrowReviewWordIds: string[];

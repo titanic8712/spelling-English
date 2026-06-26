@@ -58,9 +58,17 @@ export default function App() {
   }
 
   function buildSummary(sourceResults: WordAttemptResult[]): SessionSummary {
+    const completedCount = sourceResults.length;
+
     return {
-      completedCount: sourceResults.length,
+      completedCount,
       cleanSuccessCount: sourceResults.filter((result) => result.cleanSuccess).length,
+      averageAccuracyPercent: completedCount === 0
+        ? 0
+        : Math.round(sourceResults.reduce((sum, result) => sum + result.accuracyPercent, 0) / completedCount),
+      averageDurationMs: completedCount === 0
+        ? 0
+        : Math.round(sourceResults.reduce((sum, result) => sum + result.durationMs, 0) / completedCount),
       retryWordIds: sourceResults.filter((result) => result.wrongAttempts > 0).map((result) => result.wordId),
       hintedWordIds: sourceResults.filter((result) => result.hintUsed).map((result) => result.wordId),
       tomorrowReviewWordIds: sourceResults.filter((result) => !result.cleanSuccess).map((result) => result.wordId),

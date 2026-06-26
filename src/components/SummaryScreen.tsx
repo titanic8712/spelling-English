@@ -6,6 +6,10 @@ type SummaryScreenProps = {
   onRestart: () => void;
 };
 
+function formatDuration(durationMs: number) {
+  return `${(durationMs / 1000).toFixed(1)}s`;
+}
+
 export function SummaryScreen({ summary, onRestart }: SummaryScreenProps) {
   return (
     <section className="summary-panel">
@@ -16,6 +20,9 @@ export function SummaryScreen({ summary, onRestart }: SummaryScreenProps) {
         <span>{summary.cleanSuccessCount} clean successes</span>
         <span>{summary.retryWordIds.length} retry words</span>
         <span>{summary.hintedWordIds.length} hint words</span>
+        <span>Today accuracy {summary.averageAccuracyPercent}%</span>
+        <span>Average spelling time {formatDuration(summary.averageDurationMs)}</span>
+        <span>Need review {summary.tomorrowReviewWordIds.length}</span>
       </div>
       <button className="primary-action" type="button" onClick={onRestart}>
         <RotateCcw className="button-icon" aria-hidden="true" />

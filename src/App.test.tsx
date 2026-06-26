@@ -45,12 +45,20 @@ it("shows a wrong attempt, clears cells, and then accepts the correct spelling",
   render(<App />);
   await user.click(screen.getByRole("button", { name: "Start practice" }));
 
-  await user.keyboard("abandox");
+  expect(screen.getByLabelText("Letter 1")).toHaveAttribute("aria-current", "true");
+  await user.keyboard("a");
+  expect(screen.getByLabelText("Letter 1")).toHaveClass("is-filled");
+  expect(screen.getByLabelText("Letter 2")).toHaveAttribute("aria-current", "true");
+
+  await user.keyboard("bandox");
   expect(screen.getByText("Try again")).toBeInTheDocument();
 
   await user.keyboard("abandon");
   expect(screen.getByText("放弃")).toBeInTheDocument();
   expect(screen.getByText("They had to abandon the plan after the storm.")).toBeInTheDocument();
+  expect(screen.getByText("Accuracy 50%")).toBeInTheDocument();
+  expect(screen.getByText("Retries 1")).toBeInTheDocument();
+  expect(screen.getByText(/Time \d+\.\d+s/)).toBeInTheDocument();
 });
 
 it("reveals a hint and marks the word as assisted", async () => {
@@ -84,4 +92,24 @@ it("advances once to the next word after the result countdown", async () => {
   expect(screen.getByText("/əˈbeɪt/")).toBeInTheDocument();
   expect(screen.queryByText("Session complete")).not.toBeInTheDocument();
   expect(screen.queryByText("/əˈbrʌpt/")).not.toBeInTheDocument();
+});
+
+it("summarizes accuracy, average time, and review load after a short session", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+
+  await user.clear(screen.getByLabelText("Daily target"));
+  await user.type(screen.getByLabelText("Daily target"), "1");
+  await user.clear(screen.getByLabelText("Countdown seconds"));
+  await user.type(screen.getByLabelText("Countdown seconds"), "1");
+  await user.click(screen.getByLabelText("Autoplay pronunciation"));
+  await user.click(screen.getByRole("button", { name: "Save settings" }));
+  await user.click(screen.getByRole("button", { name: "Start practice" }));
+
+  await user.keyboard("abandon");
+
+  expect(await screen.findByText("Session complete", {}, { timeout: 2500 })).toBeInTheDocument();
+  expect(screen.getByText("Today accuracy 100%")).toBeInTheDocument();
+  expect(screen.getByText(/Average spelling time \d+\.\d+s/)).toBeInTheDocument();
+  expect(screen.getByText("Need review 0")).toBeInTheDocument();
 });
