@@ -11,10 +11,11 @@ export function ResultPanel({ word, assisted, countdown }: ResultPanelProps) {
     <section className="result-panel" aria-live="polite">
       <p className="result-state">{assisted ? "Completed with help" : "Clean success"}</p>
       <h2>{word.word}</h2>
-      <p>{word.phonetic}</p>
-      <p>{word.meaningZh}</p>
-      <p>{word.example}</p>
-      <p>Next word in {countdown}</p>
+      <p className="phonetic-line">{word.phonetic || "American pronunciation via browser voice"}</p>
+      <p className="meaning-line">{word.meaningZh}</p>
+      {word.example.length > 0 ? <blockquote>{word.example}</blockquote> : null}
+      {word.category ? <p className="source-line">{word.category}</p> : null}
+      <p className="countdown-note">Next word in {countdown}</p>
     </section>
   );
 }

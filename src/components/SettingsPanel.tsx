@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Save } from "lucide-react";
 import type { PracticeSettings } from "../domain/types";
 
 type SettingsPanelProps = {
@@ -23,6 +24,10 @@ export function SettingsPanel({ settings, onSave }: SettingsPanelProps) {
 
   return (
     <section className="settings-panel" aria-label="Practice settings">
+      <div className="settings-heading">
+        <p className="section-label">Session settings</p>
+        <p>Adjust the daily load and feedback before you begin.</p>
+      </div>
       <label>
         Daily target
         <input
@@ -57,7 +62,10 @@ export function SettingsPanel({ settings, onSave }: SettingsPanelProps) {
         />
         Sound effects
       </label>
-      <button type="button" onClick={saveSettings}>Save settings</button>
+      <button className="secondary-action settings-save" type="button" onClick={saveSettings}>
+        <Save className="button-icon" aria-hidden="true" />
+        Save settings
+      </button>
     </section>
   );
 }

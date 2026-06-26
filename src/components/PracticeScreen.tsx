@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Lightbulb, Volume2 } from "lucide-react";
 import type { WordAttemptResult, WordEntry } from "../domain/types";
 import { applySpellingKey, createSpellingState, isComplete, isCorrect, resetTypedLetters } from "../domain/spellingController";
 import { ResultPanel } from "./ResultPanel";
@@ -91,6 +92,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
   }, [playError, playSuccess, showResult]);
 
   const assisted = useMemo(() => hintUsed || wrongAttempts > 0, [hintUsed, wrongAttempts]);
+  const pronunciationLabel = word.phonetic.length > 0 ? word.phonetic : "American pronunciation";
 
   if (showResult) {
     return <ResultPanel word={word} assisted={assisted} countdown={countdown} />;
@@ -98,16 +100,30 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
 
   return (
     <section className="practice-panel">
-      <p className="eyebrow">Listen and spell</p>
-      <h1>{word.phonetic}</h1>
-      {audioError ? <p role="status">Audio temporarily unavailable</p> : null}
-      <div className="practice-actions">
-        <button type="button" onClick={handleReplay}>Replay pronunciation</button>
-        <button type="button" onClick={() => setHintUsed(true)}>Show hint</button>
+      <div className="practice-header">
+        <p className="eyebrow">Listen and spell</p>
+        <p className="section-label">Type what you hear</p>
+        <h1>{pronunciationLabel}</h1>
       </div>
-      {hintUsed ? <p className="hint-word">{word.word}</p> : null}
-      {wrongAttempts > 0 ? <p role="status">Try again</p> : null}
-      <SpellingCells letters={state.letters} isShaking={isShaking} />
+
+      {audioError ? <p className="status-note" role="status">Audio temporarily unavailable</p> : null}
+
+      <div className="practice-actions" aria-label="Word actions">
+        <button className="secondary-action" type="button" onClick={handleReplay}>
+          <Volume2 className="button-icon" aria-hidden="true" />
+          Replay pronunciation
+        </button>
+        <button className="quiet-action" type="button" onClick={() => setHintUsed(true)}>
+          <Lightbulb className="button-icon" aria-hidden="true" />
+          Show hint
+        </button>
+      </div>
+
+      <div className="spelling-stage">
+        {hintUsed ? <p className="hint-word">{word.word}</p> : null}
+        {wrongAttempts > 0 ? <p className="status-note retry" role="status">Try again</p> : null}
+        <SpellingCells letters={state.letters} isShaking={isShaking} />
+      </div>
     </section>
   );
 }

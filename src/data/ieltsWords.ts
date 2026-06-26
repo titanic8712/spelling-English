@@ -1,6 +1,7 @@
 import type { WordEntry } from "../domain/types";
+import { generatedIeltsVocabulary } from "./generatedIeltsVocabulary";
 
-export const ieltsWords: WordEntry[] = [
+const localAudioSampleWords: WordEntry[] = [
   {
     id: "abandon",
     word: "abandon",
@@ -31,4 +32,9 @@ export const ieltsWords: WordEntry[] = [
     difficulty: "medium",
     order: 3,
   },
+];
+
+export const ieltsWords: WordEntry[] = [
+  ...localAudioSampleWords,
+  ...generatedIeltsVocabulary,
 ];
