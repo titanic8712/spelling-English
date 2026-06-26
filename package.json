@@ -7,18 +7,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
+    "@vitejs/plugin-react": "4.3.4",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "latest",
     "@testing-library/react": "latest",
     "@testing-library/user-event": "latest",
-    "jsdom": "latest",
-    "vitest": "latest"
+    "jsdom": "25.0.1",
+    "vitest": "2.1.9"
   }
 }
