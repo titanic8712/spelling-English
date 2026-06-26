@@ -8,10 +8,12 @@ Offline-first IELTS vocabulary spelling trainer for B1-B2 learners.
 - 1,600+ MIT-licensed IELTS vocabulary entries with Chinese meanings
 - American phonetics and bundled local pronunciation audio
 - Keyboard-based letter-by-letter spelling cells
+- Current-letter highlighting with typed-cell feedback
 - Wrong-answer retry with shake feedback and error tone
-- Success tone, meaning, example sentence, and countdown to the next word
+- Success tone, attempt accuracy, retry count, spelling time, meaning, example sentence, and countdown to the next word
 - Local progress storage with interval review scheduling
 - Hint-assisted completion tracking
+- Session summary with today accuracy, average spelling time, and review load
 - Responsive desktop and mobile layout
 
 ## Tech Stack

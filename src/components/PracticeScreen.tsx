@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Lightbulb, Volume2 } from "lucide-react";
 import type { WordAttemptResult, WordEntry } from "../domain/types";
-import { applySpellingKey, createSpellingState, isComplete, isCorrect, resetTypedLetters } from "../domain/spellingController";
+import { applySpellingKey, createSpellingState, getActiveLetterIndex, isComplete, isCorrect, resetTypedLetters } from "../domain/spellingController";
 import { ResultPanel } from "./ResultPanel";
 import { SpellingCells } from "./SpellingCells";
 
@@ -23,6 +23,8 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
   const [isShaking, setIsShaking] = useState(false);
   const [countdown, setCountdown] = useState(countdownSeconds);
   const [audioError, setAudioError] = useState(false);
+  const [attemptResult, setAttemptResult] = useState<WordAttemptResult | null>(null);
+  const startedAtRef = useRef(Date.now());
   const completionSentRef = useRef(false);
 
   useEffect(() => {
@@ -33,6 +35,8 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
     setIsShaking(false);
     setCountdown(countdownSeconds);
     setAudioError(false);
+    setAttemptResult(null);
+    startedAtRef.current = Date.now();
     completionSentRef.current = false;
   }, [word, countdownSeconds]);
 
@@ -55,18 +59,28 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
     if (countdown <= 0) {
       if (completionSentRef.current) return;
       completionSentRef.current = true;
-      onComplete({
-        wordId: word.id,
-        cleanSuccess: wrongAttempts === 0 && !hintUsed,
-        wrongAttempts,
-        hintUsed,
-        completedAt: new Date().toISOString(),
-      });
+      if (attemptResult != null) onComplete(attemptResult);
       return;
     }
     const timer = window.setTimeout(() => setCountdown((value) => value - 1), 1000);
     return () => window.clearTimeout(timer);
-  }, [countdown, hintUsed, onComplete, showResult, word.id, wrongAttempts]);
+  }, [attemptResult, countdown, onComplete, showResult]);
+
+  function buildAttemptResult(currentWrongAttempts: number): WordAttemptResult {
+    const typedCharacterCount = word.word.length * (currentWrongAttempts + 1);
+    const accuracyPercent = Math.round((word.word.length / typedCharacterCount) * 100);
+
+    return {
+      wordId: word.id,
+      cleanSuccess: currentWrongAttempts === 0 && !hintUsed,
+      wrongAttempts: currentWrongAttempts,
+      hintUsed,
+      durationMs: Math.max(0, Date.now() - startedAtRef.current),
+      typedCharacterCount,
+      accuracyPercent,
+      completedAt: new Date().toISOString(),
+    };
+  }
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -76,6 +90,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
         if (!isComplete(next)) return next;
         if (isCorrect(next)) {
           playSuccess();
+          setAttemptResult(buildAttemptResult(wrongAttempts));
           setShowResult(true);
           return next;
         }
@@ -89,13 +104,14 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [playError, playSuccess, showResult]);
+  }, [hintUsed, playError, playSuccess, showResult, word.id, word.word, wrongAttempts]);
 
   const assisted = useMemo(() => hintUsed || wrongAttempts > 0, [hintUsed, wrongAttempts]);
   const pronunciationLabel = word.phonetic.length > 0 ? word.phonetic : "American pronunciation";
+  const activeLetterIndex = getActiveLetterIndex(state);
 
-  if (showResult) {
-    return <ResultPanel word={word} assisted={assisted} countdown={countdown} />;
+  if (showResult && attemptResult != null) {
+    return <ResultPanel word={word} assisted={assisted} result={attemptResult} countdown={countdown} />;
   }
 
   return (
@@ -122,7 +138,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
       <div className="spelling-stage">
         {hintUsed ? <p className="hint-word">{word.word}</p> : null}
         {wrongAttempts > 0 ? <p className="status-note retry" role="status">Try again</p> : null}
-        <SpellingCells letters={state.letters} isShaking={isShaking} />
+        <SpellingCells letters={state.letters} activeIndex={activeLetterIndex} isShaking={isShaking} />
       </div>
     </section>
   );

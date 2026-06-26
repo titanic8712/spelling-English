@@ -35,6 +35,11 @@ export function isComplete(state: SpellingState): boolean {
   return state.letters.every((letter) => letter !== "");
 }
 
+export function getActiveLetterIndex(state: SpellingState): number | null {
+  const nextIndex = state.letters.findIndex((letter) => letter === "");
+  return nextIndex === -1 ? null : nextIndex;
+}
+
 export function isCorrect(state: SpellingState): boolean {
   return state.letters.join("").toLowerCase() === state.targetWord.toLowerCase();
 }
