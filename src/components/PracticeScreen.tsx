@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { WordAttemptResult, WordEntry } from "../domain/types";
 import { applySpellingKey, createSpellingState, isComplete, isCorrect, resetTypedLetters } from "../domain/spellingController";
 import { ResultPanel } from "./ResultPanel";
@@ -22,6 +22,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
   const [isShaking, setIsShaking] = useState(false);
   const [countdown, setCountdown] = useState(countdownSeconds);
   const [audioError, setAudioError] = useState(false);
+  const completionSentRef = useRef(false);
 
   useEffect(() => {
     setState(createSpellingState(word.word));
@@ -31,6 +32,7 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
     setIsShaking(false);
     setCountdown(countdownSeconds);
     setAudioError(false);
+    completionSentRef.current = false;
   }, [word, countdownSeconds]);
 
   useEffect(() => {
@@ -41,6 +43,8 @@ export function PracticeScreen({ word, countdownSeconds, autoplayPronunciation, 
   useEffect(() => {
     if (!showResult) return;
     if (countdown <= 0) {
+      if (completionSentRef.current) return;
+      completionSentRef.current = true;
       onComplete({
         wordId: word.id,
         cleanSuccess: wrongAttempts === 0 && !hintUsed,

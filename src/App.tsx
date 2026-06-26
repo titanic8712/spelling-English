@@ -9,7 +9,7 @@ import { createAudioController, createBrowserTonePlayer } from "./domain/audioCo
 import { buildDailySession } from "./domain/practiceEngine";
 import { applyReviewResult } from "./domain/reviewScheduler";
 import { DEFAULT_SETTINGS, createStorage } from "./domain/storage";
-import type { SessionSummary, WordAttemptResult, WordProgress } from "./domain/types";
+import type { SessionSummary, WordAttemptResult, WordEntry, WordProgress } from "./domain/types";
 
 const storage = createStorage(window.localStorage);
 const audio = createAudioController({
@@ -39,10 +39,12 @@ export default function App() {
   const session = useMemo(() => buildDailySession({ words: ieltsWords, progressById, today: todayIsoDate(), dailyTarget: settings.dailyTarget }), [progressById, settings.dailyTarget]);
   const [screen, setScreen] = useState<"today" | "practice" | "summary">("today");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [practiceWords, setPracticeWords] = useState<WordEntry[]>([]);
   const [results, setResults] = useState<WordAttemptResult[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
 
   function handleStart() {
+    setPracticeWords(session.words);
     setResults([]);
     setSummary(null);
     setActiveIndex(0);
@@ -75,7 +77,7 @@ export default function App() {
     storage.saveProgress(nextProgress);
     setResults(nextResults);
 
-    if (activeIndex >= session.words.length - 1) {
+    if (activeIndex >= practiceWords.length - 1) {
       setSummary(buildSummary(nextResults));
       setScreen("summary");
     } else {
@@ -92,7 +94,7 @@ export default function App() {
   }
 
   if (screen === "practice") {
-    const activeWord = session.words[activeIndex];
+    const activeWord = practiceWords[activeIndex];
     if (activeWord == null) {
       return (
         <main className="app-shell">

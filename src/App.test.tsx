@@ -56,3 +56,20 @@ it("reveals a hint and marks the word as assisted", async () => {
   await user.keyboard("abandon");
   expect(screen.getByText("Completed with help")).toBeInTheDocument();
 });
+
+it("advances once to the next word after the result countdown", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+
+  await user.clear(screen.getByLabelText("Countdown seconds"));
+  await user.type(screen.getByLabelText("Countdown seconds"), "1");
+  await user.click(screen.getByLabelText("Autoplay pronunciation"));
+  await user.click(screen.getByRole("button", { name: "Save settings" }));
+  await user.click(screen.getByRole("button", { name: "Start practice" }));
+
+  await user.keyboard("abandon");
+  expect(screen.getByText("Clean success")).toBeInTheDocument();
+
+  expect(await screen.findByText("/əˈbeɪt/", {}, { timeout: 2500 })).toBeInTheDocument();
+  expect(screen.queryByText("Session complete")).not.toBeInTheDocument();
+});
