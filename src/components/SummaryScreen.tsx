@@ -16,13 +16,34 @@ export function SummaryScreen({ summary, onRestart }: SummaryScreenProps) {
       <p className="eyebrow">Study session finished</p>
       <h1>Session complete</h1>
       <div className="summary-grid">
-        <span>{summary.completedCount} completed</span>
-        <span>{summary.cleanSuccessCount} clean successes</span>
-        <span>{summary.retryWordIds.length} retry words</span>
-        <span>{summary.hintedWordIds.length} hint words</span>
-        <span>Today accuracy {summary.averageAccuracyPercent}%</span>
-        <span>Average spelling time {formatDuration(summary.averageDurationMs)}</span>
-        <span>Need review {summary.tomorrowReviewWordIds.length}</span>
+        <span>
+          <span className="metric-num">{summary.completedCount}</span>
+          <span className="metric-label">completed</span>
+        </span>
+        <span>
+          <span className="metric-num">{summary.cleanSuccessCount}</span>
+          <span className="metric-label">clean successes</span>
+        </span>
+        <span>
+          <span className="metric-num">{summary.retryWordIds.length}</span>
+          <span className="metric-label">retry words</span>
+        </span>
+        <span>
+          <span className="metric-num">{summary.hintedWordIds.length}</span>
+          <span className="metric-label">hint words</span>
+        </span>
+        <span>
+          <span className="metric-num">{summary.averageAccuracyPercent}%</span>
+          <span className="metric-label">Today accuracy</span>
+        </span>
+        <span>
+          <span className="metric-num">{formatDuration(summary.averageDurationMs)}</span>
+          <span className="metric-label">Average spelling time</span>
+        </span>
+        <span>
+          <span className="metric-num">{summary.tomorrowReviewWordIds.length}</span>
+          <span className="metric-label">Need review</span>
+        </span>
       </div>
       <button className="primary-action" type="button" onClick={onRestart}>
         <RotateCcw className="button-icon" aria-hidden="true" />

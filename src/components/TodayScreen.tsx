@@ -30,9 +30,18 @@ export function TodayScreen({ dailyTarget, dueReviewCount, newWordCount, setting
       </div>
 
       <div className="stats-grid">
-        <span className="metric-card">{dailyTarget} total questions</span>
-        <span className="metric-card">{dueReviewCount} reviews due</span>
-        <span className="metric-card">{newWordCount} new words planned</span>
+        <span className="metric-card">
+          <span className="metric-num">{dailyTarget}</span>
+          <span className="metric-label">total questions</span>
+        </span>
+        <span className="metric-card">
+          <span className="metric-num">{dueReviewCount}</span>
+          <span className="metric-label">reviews due</span>
+        </span>
+        <span className="metric-card">
+          <span className="metric-num">{newWordCount}</span>
+          <span className="metric-label">new words planned</span>
+        </span>
       </div>
 
       {settingsPanel}
